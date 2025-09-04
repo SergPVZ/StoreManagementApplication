@@ -1,12 +1,19 @@
 package com.example.store.mapper;
 
+import com.example.store.dto.AllStoresResponseDto;
 import com.example.store.dto.StoreResponseDto;
 import com.example.store.entity.Store;
 import org.springframework.stereotype.Component;
 
-@Component
-public class StoreMapper {
+@Component                      // отмечает класс как бин, который можно внедрить в другие компоненты через @Autowired
+public class StoreMapper {                                      /* преобразует объекты сущностей в
+                                                                  объекты для передачи данных (ResponseDto) */
     public StoreResponseDto mapToStoreResponseDto(Store store) {
-        return new StoreResponseDto(store.getId(), store.getName(), store.getLocation());
+        return new StoreResponseDto(store.getId(), store.getName(), store.getLocation(), store.getEmail());
     }
+
+//    public StoreResponseDto mapToAllStoreResponseDto(Store store) {
+//        return new AllStoresResponseDto(store.getId(), store.getName(), store.getLocation());
+//    }
+
 }

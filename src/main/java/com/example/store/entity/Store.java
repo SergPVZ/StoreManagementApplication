@@ -13,14 +13,16 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.UUID;
 
-@Data
+@Data                       // автоматически создаёт get set для всех полей класса
 @Entity(name = "stores")    // аннотация помечаем класс как сущность
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor         // создаёт конструктор всех аргументов
+@NoArgsConstructor          // создаёт конструктор без аргументов
 @EqualsAndHashCode
-public class Store {
+public class Store {        /* описывает структуру данных в БД
+                              1) через Репозиторий данные сохраняет, загружает и удаляет
+                              2) через Маппер преобразует в ДТО*/
 
-    @Id                    // ключ
+    @Id                     // ключ
     @Column                 // поле изображается колонкой в БД
     private UUID id;
 
@@ -29,6 +31,9 @@ public class Store {
 
     @Column
     private String location;
+
+    @Column
+    private String email;
 
     @LastModifiedDate        // дата обновления автомотическая
     @Column

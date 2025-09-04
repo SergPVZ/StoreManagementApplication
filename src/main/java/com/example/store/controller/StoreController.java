@@ -1,5 +1,6 @@
 package com.example.store.controller;
 
+import com.example.store.dto.AllStoresResponseDto;
 import com.example.store.dto.StoreResponseDto;
 import com.example.store.request.StoreRequest;
 import com.example.store.service.StoreService;
@@ -8,43 +9,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
-@RestController
-@RequestMapping("/stores")           // все методы в классе обрабатывают запросы с адреса /stores
-public class StoreController {          // точка соприкосновения "пользователь - программа"
+@RestController                                         // для взаимодействия с API
+@RequestMapping("/stores")                           // все методы в классе обрабатывают запросы с адреса /stores
+public class StoreController {                          // - точка соприкосновения "пользователь - программа"
 
-    @Autowired
+    @Autowired                                          // подключает к адресу из @RequestMapping
     private StoreService storeService;
 
-    @PostMapping
-    public ResponseEntity<StoreResponseDto> createStore(@Valid @RequestBody StoreRequest request) {    // Valid - связка по id
-
+    @PostMapping                                     // принимает данные из тела запроса
+    public ResponseEntity<StoreResponseDto> createStore(@Valid @RequestBody StoreRequest request) {
+                                                        /*   Valid - связка по id
+                                                       RequestBody - преобразует тело запроса(JSON/XML) в объект */
         StoreResponseDto storeResponse = storeService.createStore(request);
 
         return ResponseEntity.ok(storeResponse);
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")                           // удаление данных из БД по ключу
     public ResponseEntity<Void> deleteStore(@PathVariable UUID id) {
-
+                                                         // PathVariable - извлекает данные из URL по значению
         storeService.deleteStore(id);
 
         return ResponseEntity.noContent().build();
+
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")                               // получить данные магазина из БД по id
     public ResponseEntity<StoreResponseDto> findStoreById(@PathVariable UUID id) {
 
         StoreResponseDto storeResponseDto = storeService.findById(id);
+
         return ResponseEntity.ok(storeResponseDto);
+
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}")                               // обновление данных по ключу
     public ResponseEntity<StoreResponseDto> updateStore(@PathVariable UUID id, @Valid @RequestBody StoreRequest request) {
+
         storeService.updateById(id, request);
+
         return ResponseEntity.ok(storeService.findById(id));
+
+    }
+
+    @GetMapping
+    public ResponseEntity<List<StoreResponseDto>> findAllStores() {
+
+        List <StoreResponseDto> allStoreResponse = storeService.findAllStores(); // storeResponse
+
+        return ResponseEntity.ok(allStoreResponse);
+
     }
 
 }
