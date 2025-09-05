@@ -57,12 +57,20 @@ public class StoreController {                          // - точка сопр
     }
 
     @GetMapping
-    public ResponseEntity<List<StoreResponseDto>> findAllStores() {
+    public ResponseEntity<List<AllStoresResponseDto>> findAllStores() {
 
-        List <StoreResponseDto> allStoreResponse = storeService.findAllStores(); // storeResponse
+        List <AllStoresResponseDto> storeResponse = storeService.findAllStores(); // allStoreResponse
 
-        return ResponseEntity.ok(allStoreResponse);
+        return ResponseEntity.ok(storeResponse);
 
     }
+
+//    @GetMapping
+//    public ResponseEntity<List<StoreResponseDto>> findStoresByLocation(@RequestParam String location) {
+//
+//        List <StoreResponseDto> storesInLocation = storeService.findByLocation();
+//
+//        return ResponseEntity.ok(storesInLocation);
+//    }
 
 }

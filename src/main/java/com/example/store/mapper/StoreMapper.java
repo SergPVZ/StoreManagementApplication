@@ -5,6 +5,7 @@ import com.example.store.dto.StoreResponseDto;
 import com.example.store.entity.Store;
 import org.springframework.stereotype.Component;
 
+// создание карты
 @Component                      // отмечает класс как бин, который можно внедрить в другие компоненты через @Autowired
 public class StoreMapper {                                      /* преобразует объекты сущностей в
                                                                   объекты для передачи данных (ResponseDto) */
@@ -12,8 +13,8 @@ public class StoreMapper {                                      /* преобр�
         return new StoreResponseDto(store.getId(), store.getName(), store.getLocation(), store.getEmail());
     }
 
-//    public StoreResponseDto mapToAllStoreResponseDto(Store store) {
-//        return new AllStoresResponseDto(store.getId(), store.getName(), store.getLocation());
-//    }
+    public AllStoresResponseDto mapToAllStoresResponseDto(Store store){
+        return new AllStoresResponseDto(store.getId(), store.getName(), store.getLocation());
+    }
 
 }

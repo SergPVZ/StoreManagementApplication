@@ -10,9 +10,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreResponseDto {                         /* использует Контроллер как ДТО для отправки данных клиенту
+public class StoreResponseDto{                         /* использует Контроллер как ДТО для отправки данных клиенту
                                                             принbмает Dto из ResponseDto
-                                                            TODO унаследуется от AllResponseDto*/
+                                                            TODO: унаследоваться от AllResponseDto */
 
     @Schema(description = "Идентификатор магазина")
     private UUID id;

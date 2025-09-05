@@ -1,18 +1,16 @@
 package com.example.store.dto;
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.UUID;
 
-@Schema(description = "DTO с основной информацией для работы со списком всех магазинов")
+@Schema(description = "DTO с информацией для работы со списком всех магазинах")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AllStoresResponseDto {                         /* использует Контроллер как ДТО для отправки данных клиенту
-                                                            принbмает Dto из ResponseDto */
+public class AllStoresResponseDto {
 
     @Schema(description = "Идентификатор магазина")
     private UUID id;
@@ -24,4 +22,3 @@ public class AllStoresResponseDto {                         /* использу�
     private String location;
 
 }
-

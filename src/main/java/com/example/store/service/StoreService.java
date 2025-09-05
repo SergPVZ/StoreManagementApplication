@@ -15,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service                                         /* обозначает класс Сервис, который вызывает методы класса Контроллера
                                                     для выполнения бизнес-логики */
@@ -61,7 +60,7 @@ public class StoreService {                      /* основная логик�
         Store store = storeRepository.findById(id).orElseThrow();
         store.setName(request.getName());
         store.setLocation(request.getLocation());
-        store.setEmail(request.getEmail());
+//        store.setEmail(request.getEmail());
 
         storeRepository.saveAndFlush(store);
 
@@ -70,16 +69,18 @@ public class StoreService {                      /* основная логик�
     }
 
 
-    public List<StoreResponseDto> findAllStores() {
+    public List<AllStoresResponseDto> findAllStores() {
 
         List<Store> stores = storeRepository.findAll();
 
-        List<StoreResponseDto> list = stores.stream()
-                .map(e -> mapper.mapToStoreResponseDto(e))
+        List<AllStoresResponseDto> list = stores.stream()
+                .map(e -> mapper.mapToAllStoresResponseDto(e))
                 .toList();
 
-        return (List<StoreResponseDto>) list;
+        return  list;
+
     }
+
 
 //    public List<AllStoresResponseDto> findAllStoresByLocatiom(String location) {
 
@@ -93,6 +94,10 @@ public class StoreService {                      /* основная логик�
 
 //    }
 
+
+
+
+
     public List<AllStoresResponseDto> findAllStoresByName() {
 
         List<Store> stores = storeRepository.findAll(Sort.by(Sort.Order.asc("name")));
@@ -100,4 +105,11 @@ public class StoreService {                      /* основная логик�
 
     }
 
+//    public List<StoreResponseDto> findByLocation() {
+//
+//        List<Store> stores = storeRepository.findAll(Sort.by(Sort.Order.asc("location")));
+//
+//        return List.of();
+//
+//    }
 }
