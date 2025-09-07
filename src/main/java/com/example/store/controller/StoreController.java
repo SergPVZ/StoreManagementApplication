@@ -31,7 +31,7 @@ public class StoreController {                          // - точка сопр
 
     @DeleteMapping("/{id}")                           // удаление данных из БД по ключу
     public ResponseEntity<Void> deleteStore(@PathVariable UUID id) {
-                                                         // PathVariable - извлекает данные из URL по значению
+        // PathVariable - извлекает данные из URL по значению
         storeService.deleteStore(id);
 
         return ResponseEntity.noContent().build();
@@ -59,18 +59,37 @@ public class StoreController {                          // - точка сопр
     @GetMapping
     public ResponseEntity<List<AllStoresResponseDto>> findAllStores() {
 
-        List <AllStoresResponseDto> storeResponse = storeService.findAllStores(); // allStoreResponse
+        List<AllStoresResponseDto> storeResponse = storeService.findAllStores(); // allStoreResponse
 
         return ResponseEntity.ok(storeResponse);
 
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<StoreResponseDto>> findStoresByLocation(@RequestParam String location) {
-//
-//        List <StoreResponseDto> storesInLocation = storeService.findByLocation();
-//
-//        return ResponseEntity.ok(storesInLocation);
-//    }
+    @GetMapping("/location/{location}")
+    public ResponseEntity<List<StoreResponseDto>> findStoresByLocation(@RequestParam String location) {
+
+        List<StoreResponseDto> storesInLocation = storeService.findAllStoresByLocatiom(location);
+
+        return ResponseEntity.ok(storesInLocation);
+
+    }
+
+    @GetMapping("/sorted")
+    public ResponseEntity<List<AllStoresResponseDto>> findAllStoresByName() {
+
+        List<AllStoresResponseDto> allStoresByNameResponseDto = storeService.findAllStoresByName();
+
+        return ResponseEntity.ok(allStoresByNameResponseDto);
+
+    }
+
+    @PostMapping("/{id}/copy")
+    public ResponseEntity<StoreResponseDto> copyStore(@PathVariable UUID id) {
+
+        StoreResponseDto storeResponseDto = storeService.copy(id);
+
+        return ResponseEntity.ok(storeResponseDto);
+
+    }
 
 }

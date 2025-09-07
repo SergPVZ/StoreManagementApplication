@@ -6,7 +6,8 @@ import com.example.store.entity.Store;
 import com.example.store.mapper.StoreMapper;
 import com.example.store.repository.StoreRepository;
 import com.example.store.request.StoreRequest;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -18,7 +19,8 @@ import java.util.UUID;
 
 @Service                                         /* обозначает класс Сервис, который вызывает методы класса Контроллера
                                                     для выполнения бизнес-логики */
-@Transactional(rollbackOn = Exception.class)     // в случае поломки проводит откат предыдущих изменений
+//@Transactional(rollbackOn = Exception.class)     // в случае поломки проводит откат предыдущих изменений
+@Transactional(readOnly = true)                    // весь класс - только для чтения
 @Validated
 public class StoreService {                      /* основная логика работы с данными
                                                     1) принимает и возвращает данные в контроллер
@@ -33,6 +35,7 @@ public class StoreService {                      /* основная логик�
     private StoreMapper mapper;
 
     // создание нового маг-на:
+    @Transactional(rollbackFor = Exception.class)       // для методов, которые меняют БД
     public StoreResponseDto createStore(@Valid StoreRequest request) {
 
         Store store = new Store(UUID.randomUUID(), request.getName(), request.getLocation(), request.getEmail(), null);
@@ -43,6 +46,7 @@ public class StoreService {                      /* основная логик�
 
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteStore(UUID id) {
         storeRepository.deleteById(id);
     }
@@ -55,12 +59,13 @@ public class StoreService {                      /* основная логик�
 
     }
 
+
+    @Transactional(rollbackFor = Exception.class)
     public StoreResponseDto updateById(UUID id, @Valid StoreRequest request) {
 
         Store store = storeRepository.findById(id).orElseThrow();
         store.setName(request.getName());
         store.setLocation(request.getLocation());
-//        store.setEmail(request.getEmail());
 
         storeRepository.saveAndFlush(store);
 
@@ -68,7 +73,7 @@ public class StoreService {                      /* основная логик�
 
     }
 
-
+    // без e-mail'a
     public List<AllStoresResponseDto> findAllStores() {
 
         List<Store> stores = storeRepository.findAll();
@@ -77,26 +82,22 @@ public class StoreService {                      /* основная логик�
                 .map(e -> mapper.mapToAllStoresResponseDto(e))
                 .toList();
 
-        return  list;
+        return list;
 
     }
 
+    // добавил e-mail
+    public List<StoreResponseDto> findAllStoresByLocatiom(String location) {
 
-//    public List<AllStoresResponseDto> findAllStoresByLocatiom(String location) {
+        List<Store> stores = storeRepository.findByLocation(location);
 
-//        List<Store> stores = storeRepository.findByLocation(location);
+        List<StoreResponseDto> listLocation = stores.stream()
+                .map(store -> mapper.mapToStoreResponseDto(store))
+                .toList();
 
-//        List<AllStoresResponseDto> listLocation = stores.stream()
-//                .map(store -> mapper.mapToStoreResponseDto(store))
-//                .toList();
-//
-//        return listLocation;
+        return listLocation;
 
-//    }
-
-
-
-
+    }
 
     public List<AllStoresResponseDto> findAllStoresByName() {
 
@@ -105,11 +106,16 @@ public class StoreService {                      /* основная логик�
 
     }
 
-//    public List<StoreResponseDto> findByLocation() {
-//
-//        List<Store> stores = storeRepository.findAll(Sort.by(Sort.Order.asc("location")));
-//
-//        return List.of();
-//
-//    }
+    @Transactional(rollbackFor = Exception.class)
+    public StoreResponseDto copy(UUID storeId) {
+
+        Store store = storeRepository.findById(storeId).orElseThrow();
+
+        Store copyStore = new Store(UUID.randomUUID(), store.getName(), store.getLocation(), store.getEmail(), store.getUpdated_at());
+
+        storeRepository.saveAndFlush(copyStore);
+        return mapper.mapToStoreResponseDto(copyStore);
+
+    }
+
 }
