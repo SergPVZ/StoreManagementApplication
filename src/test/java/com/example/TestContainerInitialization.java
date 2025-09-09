@@ -17,11 +17,10 @@ public class TestContainerInitialization {
                 .withDatabaseName("integration-tests-db")
                 .withUsername("sa")
                 .withPassword("sa");
-
         postgresqlContainer.start();
     }
 
-    @DynamicPropertySource                             // для динамического добавления свойств в тесты
+    @DynamicPropertySource                              // для динамического добавления свойств в тесты
     public static void setupProperties(final DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", () -> "jdbc:tc:postgresql:15:///integration-tests-db");
         registry.add("spring.datasource.username", postgresqlContainer::getUsername);

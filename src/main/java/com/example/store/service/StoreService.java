@@ -6,12 +6,11 @@ import com.example.store.entity.Store;
 import com.example.store.mapper.StoreMapper;
 import com.example.store.repository.StoreRepository;
 import com.example.store.request.StoreRequest;
-//import jakarta.transaction.Transactional;
-import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;

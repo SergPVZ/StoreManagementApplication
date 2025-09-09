@@ -88,6 +88,15 @@ class StoreServiceTest extends TestContainerInitialization {
     void updateStore_whenStoreExist_thenUpdate() {
     }
 
+    @Test
+    void deleteStore_whenInvalidId_thenThrow() {
+
+//        Store store = new Store(UUID.fromString("121"), "Lilo", "Берёза", null, null);
+
+        Assertions.assertThrows(IllegalArgumentException.class, ()-> service.deleteStore(UUID.fromString("121")));
+
+    }
+
     private Store createStore(String name, String location) {
 
         Store store = new Store(UUID.randomUUID(), name, location, null, null);
