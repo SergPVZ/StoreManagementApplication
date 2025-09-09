@@ -30,7 +30,7 @@ public class Store {        /* описывает структуру данны�
 
     @Id                     // ключ
     @Column                 // поле изображается колонкой в БД
-    private UUID id;
+private UUID id;
 
     @Column
     private String name;

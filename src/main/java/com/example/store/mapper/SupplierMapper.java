@@ -2,7 +2,6 @@ package com.example.store.mapper;
 
 import com.example.store.dto.SupplierResponseDto;
 import com.example.store.entity.Supplier;
-import jakarta.persistence.Column;
 import org.springframework.stereotype.Component;
 
 @Component

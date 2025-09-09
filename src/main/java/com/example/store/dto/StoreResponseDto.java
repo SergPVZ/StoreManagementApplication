@@ -10,10 +10,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreResponseDto{                         /* использует Контроллер как ДТО для отправки данных клиенту
-                                                            принbмает Dto из ResponseDto
-                                                            TODO: унаследоваться от AllResponseDto */
-
+public class StoreResponseDto extends AllStoresResponseDto{                                      /*использует Контроллер как ДТО для отправки
+                                                                    данных клиенту принbмает Dto из ResponseDto
+                                                                    TODO: унаследоваться от AllResponseDto */
     @Schema(description = "Идентификатор магазина")
     private UUID id;
 
@@ -22,7 +21,7 @@ public class StoreResponseDto{                         /* использует �
 
     @Schema(description = "Местоположение магазина")
     private String location;
-
+//
     @Schema(description = "Электронная почта магазина")
     private String email;
 

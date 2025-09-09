@@ -28,9 +28,4 @@ public class StoreRequest {                          // получает дан�
     @NotBlank
     private String email;
 
-//    @Schema(description = "Все магазины")
-//    @JsonProperty("allStores")
-//    @NotBlank
-//    private String allStores;
-
 }

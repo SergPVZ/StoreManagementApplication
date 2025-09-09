@@ -12,18 +12,22 @@ import java.util.UUID;
 @NoArgsConstructor
 public class SupplierResponseDto {
 
-    @Schema(description = "идентификатор поставщика")
+    @Schema(description = "Идентификатор поставщика")
     private UUID id;
 
     @Schema(description = "Имя поставщика")
     private String name;
 
+    @Schema(description ="Электронная почта поставщика")
     private String email;
 
+    @Schema(description ="Номер телефона")
     private String phone;
 
+    @Schema(description ="Адрес поставщика")
     private String address;
 
+    @Schema(description ="Веб-сайт")
     private String website;
 
 }

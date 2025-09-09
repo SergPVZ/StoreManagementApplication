@@ -15,31 +15,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
-//import java.util.Locale;
 import java.util.UUID;
 
-@Data                       // автоматически создаёт get set для всех полей класса
-@Entity(name = "supplier")    // аннотация помечаем класс как сущность
-@AllArgsConstructor         // создаёт конструктор всех аргументов
-@NoArgsConstructor          // создаёт конструктор без аргументов
+
+@Data
+@Entity(name = "supplier")
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @EnableJpaAuditing
 @EntityListeners(AuditingEntityListener.class)
-
-/*
-    id: UUID, первичный ключ.
-
-    name: строка, обязательно непустое.
-
-    email: строка, обязательно непустое, формат e-mail; должен быть уникален среди поставщиков.
-
-    phone: строка, необязательное.
-
-    address: строка, необязательное.
-
-    website: строка, необязательное (URL).
-
-    updated_at: метка времени последнего изменения (обновляется автоматически механизмом аудита).   */
 
 public class Supplier {
 
