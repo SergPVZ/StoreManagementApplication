@@ -14,9 +14,12 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class StoreServiceTest extends TestContainerInitialization {
@@ -57,7 +60,7 @@ class StoreServiceTest extends TestContainerInitialization {
 
         StoreResponseDto storeResponseDto = Assertions.assertDoesNotThrow(() -> service.createStore(storeRequest));
 
-        Assertions.assertEquals(storeRequest.getName(), storeResponseDto.getName());
+        assertEquals(storeRequest.getName(), storeResponseDto.getName());
 
     }
 
@@ -78,7 +81,7 @@ class StoreServiceTest extends TestContainerInitialization {
 
         createStore("Пятёрочка", "Ленина");
 
-        StoreRequest storeRequest = createStoreRequest("Яр", "Урванцева");
+        StoreRequest storeRequest = createStoreRequest("Яр", "Ворошилова");
 
         Assertions.assertThrows(NoSuchElementException.class, () -> service.updateById(UUID.randomUUID(), storeRequest));
 
@@ -86,15 +89,35 @@ class StoreServiceTest extends TestContainerInitialization {
 
     @Test
     void updateStore_whenStoreExist_thenUpdate() {
+
+        Store store = createStore("Красная горка", "улица Лесная");
+
+        StoreRequest storeRequest = createStoreRequest("Жёлтая речка", "улица Луговая");
+
+        StoreResponseDto storeResponseDto = Assertions.assertDoesNotThrow(() -> service.updateById(store.getId(), storeRequest));
+
+        assertEquals(storeRequest.getName(), storeResponseDto.getName());
+
     }
 
     @Test
     void deleteStore_whenInvalidId_thenThrow() {
-
-//        Store store = new Store(UUID.fromString("121"), "Lilo", "Берёза", null, null);
-
         Assertions.assertThrows(IllegalArgumentException.class, ()-> service.deleteStore(UUID.fromString("121")));
+    }
 
+    @Test
+    void findById_whenStoreFoundById_thenReturnResponseDto() {
+
+        UUID id = createStore("Пятёрочка", "Ленина").getId();
+
+        assertEquals("StoreResponseDto", service.findById(id).getClass().getSimpleName());
+        assertEquals(id, service.findById(id).getId());
+
+    }
+
+    @Test
+    void findById_whenInvalidId_thenThrow() {
+        Assertions.assertThrows(IllegalArgumentException.class, ()-> service.findById(UUID.fromString("121")));
     }
 
     private Store createStore(String name, String location) {

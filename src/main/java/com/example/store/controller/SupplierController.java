@@ -19,7 +19,7 @@ public class SupplierController {
     private SupplierService supplierService;
 
     @PostMapping
-    public ResponseEntity<SupplierResponseDto> createStore(@RequestBody SupplierRequest request) {
+    public ResponseEntity<SupplierResponseDto> createStore(@RequestBody SupplierRequest request) {   //создание
         SupplierResponseDto storeResponse = supplierService.createSupplier(request);
 
         return ResponseEntity.ok(storeResponse);
@@ -27,7 +27,7 @@ public class SupplierController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SupplierResponseDto> deleteSupplier(@PathVariable UUID id) {
+    public ResponseEntity<SupplierResponseDto> deleteSupplier(@PathVariable UUID id) {    // удаление
         supplierService.deleteSupplier(id);
         return ResponseEntity.noContent().build();
     }
@@ -42,7 +42,7 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")                               // обновление данных по ключу
-    public ResponseEntity<SupplierResponseDto> updateStore(@PathVariable UUID id, @Valid @RequestBody SupplierRequest request) {
+    public ResponseEntity<SupplierResponseDto> updateSupplier(@PathVariable UUID id, @Valid @RequestBody SupplierRequest request) {
 
         supplierService.updateById(id, request);
 
@@ -51,7 +51,7 @@ public class SupplierController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SupplierResponseDto>> findAllStores() {
+    public ResponseEntity<List<SupplierResponseDto>> findAllSupplier() {   // список всех
 
         List<SupplierResponseDto> supplierResponse = supplierService.findAllSupplier(); // allStoreResponse
 

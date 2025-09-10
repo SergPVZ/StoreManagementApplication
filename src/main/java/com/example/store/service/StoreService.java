@@ -57,7 +57,6 @@ public class StoreService {                      /* основная логик�
 
     }
 
-
     @Transactional(rollbackFor = Exception.class)
     public StoreResponseDto updateById(UUID id, @Valid StoreRequest request) {
 
