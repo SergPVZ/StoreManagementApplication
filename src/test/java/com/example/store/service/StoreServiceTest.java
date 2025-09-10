@@ -108,7 +108,7 @@ class StoreServiceTest extends TestContainerInitialization {
     @Test
     void findById_whenStoreFoundById_thenReturnResponseDto() {
 
-        UUID id = createStore("Пятёрочка", "Ленина").getId();
+        UUID id = createStore("Волна", "улица Большая").getId();
 
         assertEquals("StoreResponseDto", service.findById(id).getClass().getSimpleName());
         assertEquals(id, service.findById(id).getId());
