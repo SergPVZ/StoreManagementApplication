@@ -1,8 +1,10 @@
 package com.example.store.mapper;
 
 import com.example.store.dto.AllStoresResponseDto;
+import com.example.store.dto.ProductResponseDto;
 import com.example.store.dto.StoreResponseDto;
 import com.example.store.entity.Store;
+import com.example.store.request.Product;
 import org.springframework.stereotype.Component;
 
 // создание карты
@@ -15,6 +17,10 @@ public class StoreMapper {                                      /* преобр�
 
     public AllStoresResponseDto mapToAllStoresResponseDto(Store store){
         return new AllStoresResponseDto(store.getId(), store.getName(), store.getLocation());
+    }
+
+    public ProductResponseDto mapToProductResponseDto(Product product) {
+        return new ProductResponseDto(product.getId(), product.getName(), product.getPrice(), product.getCategory());
     }
 
 }

@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreResponseDto extends AllStoresResponseDto{                                      /*использует Контроллер как ДТО для отправки
+public class StoreResponseDto extends AllStoresResponseDto{         /* использует Контроллер как ДТО для отправки
                                                                     данных клиенту принbмает Dto из ResponseDto
                                                                     TODO: унаследоваться от AllResponseDto */
     @Schema(description = "Идентификатор магазина")

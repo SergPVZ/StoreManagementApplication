@@ -26,7 +26,7 @@ public class SupplierService {
     @Autowired
     private SupplierMapper mapper;
 
-    @Transactional(rollbackFor = Exception.class)       // для методов, которые меняют БД
+    @Transactional(rollbackFor = Exception.class)
     public SupplierResponseDto createSupplier(@Valid SupplierRequest request) {
 
         Supplier supplier = new Supplier(UUID.randomUUID(), request.getName(), request.getEmail(), request.getPhone(), request.getAddress(), request.getWebsite(), null);

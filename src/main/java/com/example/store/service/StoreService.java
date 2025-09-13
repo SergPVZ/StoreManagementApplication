@@ -1,10 +1,15 @@
 package com.example.store.service;
 
 import com.example.store.dto.AllStoresResponseDto;
+import com.example.store.dto.ProductResponseDto;
 import com.example.store.dto.StoreResponseDto;
 import com.example.store.entity.Store;
+import com.example.store.entity.StoreProduct;
 import com.example.store.mapper.StoreMapper;
+import com.example.store.repository.ProductRepository;
+import com.example.store.repository.StoreProductRepository;
 import com.example.store.repository.StoreRepository;
+import com.example.store.request.Product;
 import com.example.store.request.StoreRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,10 +35,15 @@ public class StoreService {                      /* основная логик�
     @Autowired                              // для автоматического внедрения зависимостей связывает метод с Репозиторием
     private StoreRepository storeRepository;
 
+    @Autowired
+    private StoreProductRepository storeProductRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
     @Autowired                                   // связывает метод с Маппер
     private StoreMapper mapper;
 
-    // создание нового маг-на:
     @Transactional(rollbackFor = Exception.class)       // для методов, которые меняют БД
     public StoreResponseDto createStore(@Valid StoreRequest request) {
 
@@ -112,6 +123,40 @@ public class StoreService {                      /* основная логик�
 
         storeRepository.saveAndFlush(copyStore);
         return mapper.mapToStoreResponseDto(copyStore);
+
+    }
+
+    public List<ProductResponseDto> findAllProductByLocation(String location) {
+        // получаем все магазины
+        List<Store> allStores = storeRepository.findAll();
+
+        // фильтруем магазины по указанной улице
+        List<Store> storesOnStreat = new ArrayList();
+        for (Store store : allStores) {
+            if (store.getLocation().equals(location) && store.getLocation() != null) {
+                storesOnStreat.add(store);
+            }
+        }
+
+        List<ProductResponseDto> result = new ArrayList<>();
+
+        // собираем все товары из найденных магазинов
+        for (Store store : storesOnStreat) {
+
+            List<StoreProduct> storeProducts = storeProductRepository.findByStoreId(store.getId());
+
+            for (StoreProduct sp : storeProducts) {
+                Product product = productRepository.findById(sp.getProductId())
+                        .orElseThrow();
+                ProductResponseDto productResponseDto = mapper.mapToProductResponseDto(product);
+                result.add(productResponseDto);
+            }
+
+        }
+
+        return result.stream()
+                .distinct()
+                .toList();
 
     }
 

@@ -1,6 +1,8 @@
 package com.example.store.controller;
 
 import com.example.store.dto.SupplierResponseDto;
+import com.example.store.entity.Supplier;
+import com.example.store.request.StoreRequest;
 import com.example.store.request.SupplierRequest;
 import com.example.store.service.SupplierService;
 import jakarta.validation.Valid;
@@ -19,7 +21,7 @@ public class SupplierController {
     private SupplierService supplierService;
 
     @PostMapping
-    public ResponseEntity<SupplierResponseDto> createStore(@RequestBody SupplierRequest request) {   //создание
+    public ResponseEntity<SupplierResponseDto> createSupplier(@Valid @RequestBody SupplierRequest request) {   //создание
         SupplierResponseDto storeResponse = supplierService.createSupplier(request);
 
         return ResponseEntity.ok(storeResponse);

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository                                        /* автоматичеcкая р-та с БД, */
-public interface StoreRepository extends JpaRepository<Store, UUID> {           // сохраняет объект в БД
+public interface StoreRepository extends JpaRepository<Store, UUID> {           // сохраняет объект в БД (тбл)
 
     List<Store> findByLocation(String location);
 
