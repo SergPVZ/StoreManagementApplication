@@ -34,28 +34,4 @@ public class StoreProduct {
     @Column
     private UUID productId;
 
-    @Data
-    @Entity(name = "products")
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @EqualsAndHashCode
-    @EnableJpaAuditing
-    @EntityListeners(AuditingEntityListener.class)
-
-    public static class Product {
-
-        @Id
-        @Column
-        private UUID id;
-
-        @Column
-        private String name;
-
-        @Column
-        private BigDecimal price;
-
-        @Column
-        private String category;
-
-    }
 }

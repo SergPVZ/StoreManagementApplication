@@ -3,6 +3,7 @@ package com.example.store.service;
 import com.example.store.dto.AllStoresResponseDto;
 import com.example.store.dto.ProductResponseDto;
 import com.example.store.dto.StoreResponseDto;
+import com.example.store.entity.Product;
 import com.example.store.entity.Store;
 import com.example.store.entity.StoreProduct;
 import com.example.store.mapper.StoreMapper;
@@ -139,7 +140,7 @@ public class StoreService {                      /* основная логик�
                 .filter(store -> store.getLocation() != null && store.getLocation().contains(location))
                 .flatMap(store -> storeProductRepository.findByStoreId(store.getId()).stream()
                         .map(storeProduct -> {
-                            StoreProduct.Product product = productRepository.findById(storeProduct.getProductId())
+                            Product product = productRepository.findById(storeProduct.getProductId())
                                     .orElseThrow();
                             return storeMapper.mapToProductResponseDto(product);
                         })
@@ -152,7 +153,7 @@ public class StoreService {                      /* основная логик�
     @Transactional(rollbackFor = Exception.class)
     public ProductResponseDto createProduct(UUID storeId, @Valid ProductRequest request) {
 
-        StoreProduct.Product product = new StoreProduct.Product(UUID.randomUUID(), request.getName(), request.getPrice(), "some");
+        Product product = new Product(UUID.randomUUID(), request.getName(), request.getPrice(), "some");
         StoreProduct storeProduct = new StoreProduct(UUID.randomUUID(), storeId, product.getId());
 
         productRepository.saveAndFlush(product);
@@ -164,11 +165,11 @@ public class StoreService {                      /* основная логик�
 
     public List<ProductResponseDto> findUniqueProducts() {
 
-        List<StoreProduct.Product> allProducts = productRepository.findAll();
+        List<Product> allProducts = productRepository.findAll();
 
         List<ProductResponseDto> result = new ArrayList<>();
 
-        for (StoreProduct.Product product : allProducts) {
+        for (Product product : allProducts) {
 
             int countStore = storeRepository.countStoresByProductId(product.getId());
 

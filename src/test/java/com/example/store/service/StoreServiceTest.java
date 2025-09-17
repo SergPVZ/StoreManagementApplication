@@ -3,6 +3,7 @@ package com.example.store.service;
 import com.example.TestContainerInitialization;
 import com.example.store.dto.ProductResponseDto;
 import com.example.store.dto.StoreResponseDto;
+import com.example.store.entity.Product;
 import com.example.store.entity.Store;
 import com.example.store.entity.StoreProduct;
 import com.example.store.repository.ProductRepository;
@@ -154,9 +155,9 @@ class StoreServiceTest extends TestContainerInitialization {
 
         Store store = createStore("Пятёрка", "ул. Вязова");
 
-        StoreProduct.Product product1 = createProduct("Кола", BigDecimal.valueOf(33), "Напитки");
-        StoreProduct.Product product2 = createProduct("Квас", BigDecimal.valueOf(42), "Напитки");
-        StoreProduct.Product product3 = createProduct("Лимон", BigDecimal.valueOf(32), "Фрукты");
+        Product product1 = createProduct("Кола", BigDecimal.valueOf(33), "Напитки");
+        Product product2 = createProduct("Квас", BigDecimal.valueOf(42), "Напитки");
+        Product product3 = createProduct("Лимон", BigDecimal.valueOf(32), "Фрукты");
 
         createStoreProduct(store.getId(), product1.getId());
         createStoreProduct(store.getId(), product2.getId());
@@ -178,9 +179,9 @@ class StoreServiceTest extends TestContainerInitialization {
         return storeProduct;
     }
 
-    private StoreProduct.Product createProduct(String name, BigDecimal price, String category) {
+    private Product createProduct(String name, BigDecimal price, String category) {
 
-        StoreProduct.Product product = new StoreProduct.Product(UUID.randomUUID(), name, price, category);
+        Product product = new Product(UUID.randomUUID(), name, price, category);
         product = productRepository.saveAndFlush(product);
 
         return product;
