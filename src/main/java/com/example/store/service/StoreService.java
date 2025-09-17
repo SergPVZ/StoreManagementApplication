@@ -9,7 +9,7 @@ import com.example.store.mapper.StoreMapper;
 import com.example.store.repository.ProductRepository;
 import com.example.store.repository.StoreProductRepository;
 import com.example.store.repository.StoreRepository;
-import com.example.store.request.Product;
+import com.example.store.request.ProductRequest;
 import com.example.store.request.StoreRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service                                         /* обозначает класс Сервис, который вызывает методы класса Контроллера
                                                     для выполнения бизнес-логики */
@@ -43,6 +44,8 @@ public class StoreService {                      /* основная логик�
 
     @Autowired                                   // связывает метод с Маппер
     private StoreMapper mapper;
+    @Autowired
+    private StoreMapper storeMapper;
 
     @Transactional(rollbackFor = Exception.class)       // для методов, которые меняют БД
     public StoreResponseDto createStore(@Valid StoreRequest request) {
@@ -110,7 +113,10 @@ public class StoreService {                      /* основная логик�
     public List<AllStoresResponseDto> findAllStoresByName() {
 
         List<Store> stores = storeRepository.findAll(Sort.by(Sort.Order.asc("name")));
-        return List.of();
+
+        return stores.stream()
+                .map(storeMapper::mapToAllStoresResponseDto)
+                .toList();
 
     }
 
@@ -122,41 +128,57 @@ public class StoreService {                      /* основная логик�
         Store copyStore = new Store(UUID.randomUUID(), store.getName(), store.getLocation(), store.getEmail(), store.getUpdated_at());
 
         storeRepository.saveAndFlush(copyStore);
+
         return mapper.mapToStoreResponseDto(copyStore);
 
     }
+    //                  -- = ВСЕ ПРОДУКТЫ ПО АДРЕСУ = --
 
     public List<ProductResponseDto> findAllProductByLocation(String location) {
-        // получаем все магазины
-        List<Store> allStores = storeRepository.findAll();
+        return storeRepository.findAll().stream()
+                .filter(store -> store.getLocation() != null && store.getLocation().contains(location))
+                .flatMap(store -> storeProductRepository.findByStoreId(store.getId()).stream()
+                        .map(storeProduct -> {
+                            StoreProduct.Product product = productRepository.findById(storeProduct.getProductId())
+                                    .orElseThrow();
+                            return storeMapper.mapToProductResponseDto(product);
+                        })
+                )
+                .distinct()
+                .collect(Collectors.toList());
 
-        // фильтруем магазины по указанной улице
-        List<Store> storesOnStreat = new ArrayList();
-        for (Store store : allStores) {
-            if (store.getLocation().equals(location) && store.getLocation() != null) {
-                storesOnStreat.add(store);
-            }
-        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public ProductResponseDto createProduct(UUID storeId, @Valid ProductRequest request) {
+
+        StoreProduct.Product product = new StoreProduct.Product(UUID.randomUUID(), request.getName(), request.getPrice(), "some");
+        StoreProduct storeProduct = new StoreProduct(UUID.randomUUID(), storeId, product.getId());
+
+        productRepository.saveAndFlush(product);
+        storeProductRepository.saveAndFlush(storeProduct);
+
+        return storeMapper.mapToProductResponseDto(product);
+
+    }
+
+    public List<ProductResponseDto> findUniqueProducts() {
+
+        List<StoreProduct.Product> allProducts = productRepository.findAll();
 
         List<ProductResponseDto> result = new ArrayList<>();
 
-        // собираем все товары из найденных магазинов
-        for (Store store : storesOnStreat) {
+        for (StoreProduct.Product product : allProducts) {
 
-            List<StoreProduct> storeProducts = storeProductRepository.findByStoreId(store.getId());
+            int countStore = storeRepository.countStoresByProductId(product.getId());
 
-            for (StoreProduct sp : storeProducts) {
-                Product product = productRepository.findById(sp.getProductId())
-                        .orElseThrow();
-                ProductResponseDto productResponseDto = mapper.mapToProductResponseDto(product);
-                result.add(productResponseDto);
+            if (countStore == 1) {
+                result.add(storeMapper.mapToProductResponseDto(product));
             }
 
         }
 
-        return result.stream()
-                .distinct()
-                .toList();
+        return result;
 
     }
 

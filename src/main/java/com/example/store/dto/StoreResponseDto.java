@@ -4,13 +4,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.UUID;
 
 @Schema(description = "DTO с основной информацией о магазине")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreResponseDto extends AllStoresResponseDto{         /* использует Контроллер как ДТО для отправки
+public class StoreResponseDto extends AllStoresResponseDto {         /* использует Контроллер как ДТО для отправки
                                                                     данных клиенту принbмает Dto из ResponseDto
                                                                     TODO: унаследоваться от AllResponseDto */
     @Schema(description = "Идентификатор магазина")
@@ -21,7 +22,7 @@ public class StoreResponseDto extends AllStoresResponseDto{         /* испо�
 
     @Schema(description = "Местоположение магазина")
     private String location;
-//
+    //
     @Schema(description = "Электронная почта магазина")
     private String email;
 

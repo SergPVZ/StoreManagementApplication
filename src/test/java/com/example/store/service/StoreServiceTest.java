@@ -1,8 +1,12 @@
 package com.example.store.service;
 
 import com.example.TestContainerInitialization;
+import com.example.store.dto.ProductResponseDto;
 import com.example.store.dto.StoreResponseDto;
 import com.example.store.entity.Store;
+import com.example.store.entity.StoreProduct;
+import com.example.store.repository.ProductRepository;
+import com.example.store.repository.StoreProductRepository;
 import com.example.store.repository.StoreRepository;
 import com.example.store.request.StoreRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -15,10 +19,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -30,7 +37,14 @@ class StoreServiceTest extends TestContainerInitialization {
     @Autowired
     private StoreService service;
 
-    @AfterEach                              // после завершения теста сбрасывает параметры и очищает ресурсы
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private StoreProductRepository storeProductRepository;
+
+    @AfterEach
+        // после завершения теста сбрасывает параметры и очищает ресурсы
     void clear() {
         repository.deleteAll();
     }
@@ -58,14 +72,15 @@ class StoreServiceTest extends TestContainerInitialization {
 
         StoreRequest storeRequest = createStoreRequest("Пятёрочка", "ул. Урванцева");
 
-        StoreResponseDto storeResponseDto = Assertions.assertDoesNotThrow(() -> service.createStore(storeRequest));
+        StoreResponseDto storeResponseDto = assertDoesNotThrow(() -> service.createStore(storeRequest));
 
         assertEquals(storeRequest.getName(), storeResponseDto.getName());
 
     }
 
     @ParameterizedTest                          // подставляет разные наборы данных в один тест
-    @MethodSource("invalidData")                // передаёт для тестирования объёмные объеты
+    @MethodSource("invalidData")
+        // передаёт для тестирования объёмные объеты
     void updateStore_whenRequestInvalid_thenThrow(String name, String location) {
 
         Store store = createStore("Пятёрочка", "Ленина");
@@ -94,7 +109,7 @@ class StoreServiceTest extends TestContainerInitialization {
 
         StoreRequest storeRequest = createStoreRequest("Жёлтая речка", "улица Луговая");
 
-        StoreResponseDto storeResponseDto = Assertions.assertDoesNotThrow(() -> service.updateById(store.getId(), storeRequest));
+        StoreResponseDto storeResponseDto = assertDoesNotThrow(() -> service.updateById(store.getId(), storeRequest));
 
         assertEquals(storeRequest.getName(), storeResponseDto.getName());
 
@@ -102,7 +117,7 @@ class StoreServiceTest extends TestContainerInitialization {
 
     @Test
     void deleteStore_whenInvalidId_thenThrow() {
-        Assertions.assertThrows(IllegalArgumentException.class, ()-> service.deleteStore(UUID.fromString("121")));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> service.deleteStore(UUID.fromString("121")));
     }
 
     @Test
@@ -117,13 +132,63 @@ class StoreServiceTest extends TestContainerInitialization {
 
     @Test
     void findById_whenInvalidId_thenThrow() {
-        Assertions.assertThrows(IllegalArgumentException.class, ()-> service.findById(UUID.fromString("121")));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> service.findById(UUID.fromString("121")));
+    }
+
+    @Test
+    void findAllProductByLocation_whenStoreDoesNotExists_thenReturnEmptyList() {
+
+        createProduct("Кола", BigDecimal.valueOf(33), "Напитки");
+        createProduct("Квас", BigDecimal.valueOf(42), "Напитки");
+        createProduct("Лимон", BigDecimal.valueOf(32), "Фрукты");
+
+        List<ProductResponseDto> result = assertDoesNotThrow(() ->
+                service.findAllProductByLocation("ул. Вязова"));
+
+        Assertions.assertTrue(result.isEmpty());
+
+    }
+
+    @Test
+    void findAllProductByLocation_whenStoreExistsButStreetIsNull_thenThrow() {
+
+        Store store = createStore("Пятёрка", "ул. Вязова");
+
+        StoreProduct.Product product1 = createProduct("Кола", BigDecimal.valueOf(33), "Напитки");
+        StoreProduct.Product product2 = createProduct("Квас", BigDecimal.valueOf(42), "Напитки");
+        StoreProduct.Product product3 = createProduct("Лимон", BigDecimal.valueOf(32), "Фрукты");
+
+        createStoreProduct(store.getId(), product1.getId());
+        createStoreProduct(store.getId(), product2.getId());
+        createStoreProduct(store.getId(), product3.getId());
+
+        List<ProductResponseDto> result = assertDoesNotThrow(() ->
+                service.findAllProductByLocation(null));
+
+        Assertions.assertTrue(result.isEmpty());
+
+    }
+
+
+    private StoreProduct createStoreProduct(UUID storeId, UUID productId) {
+
+        StoreProduct storeProduct = new StoreProduct(UUID.randomUUID(), storeId, productId);
+        storeProduct = storeProductRepository.saveAndFlush(storeProduct);
+
+        return storeProduct;
+    }
+
+    private StoreProduct.Product createProduct(String name, BigDecimal price, String category) {
+
+        StoreProduct.Product product = new StoreProduct.Product(UUID.randomUUID(), name, price, category);
+        product = productRepository.saveAndFlush(product);
+
+        return product;
     }
 
     private Store createStore(String name, String location) {
 
         Store store = new Store(UUID.randomUUID(), name, location, null, null);
-        store = repository.saveAndFlush(store);
 
         return store;
 

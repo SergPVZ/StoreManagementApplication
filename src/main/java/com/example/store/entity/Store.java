@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
-//import java.util.Locale;
 import java.util.UUID;
 
 @Data                       // автоматически создаёт get set для всех полей класса
@@ -30,7 +29,7 @@ public class Store {        /* описывает структуру данны�
 
     @Id                     // ключ
     @Column                 // поле изображается колонкой в БД
-private UUID id;
+    private UUID id;
 
     @Column
     private String name;

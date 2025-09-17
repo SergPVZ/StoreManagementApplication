@@ -3,6 +3,7 @@ package com.example.store.controller;
 import com.example.store.dto.AllStoresResponseDto;
 import com.example.store.dto.ProductResponseDto;
 import com.example.store.dto.StoreResponseDto;
+import com.example.store.request.ProductRequest;
 import com.example.store.request.StoreRequest;
 import com.example.store.service.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -100,13 +101,24 @@ public class StoreController {                          // - точка сопр
             description = "Все товары в магазинах на указанной улице")
     public ResponseEntity<List<ProductResponseDto>> findAllProductByLocation(
             @Parameter(description = "Название улицы")
-            @RequestParam String location
-    ) {
+            @RequestParam String location) {
 
         List<ProductResponseDto> allProducts = storeService.findAllProductByLocation(location);
 
         return ResponseEntity.ok(allProducts);
 
+    }
+
+    @GetMapping("/products/wique")
+    @Operation(summary = "Найти уникальные товары",
+            description = "Товары, которые продаются только в одном магазине")
+    public ResponseEntity<List<ProductResponseDto>> findUniqueProducts(@PathVariable UUID id) {
+        return ResponseEntity.ok(storeService.findUniqueProducts());
+    }
+
+    @PostMapping("/product/{storeId}")
+    public ResponseEntity<ProductResponseDto> createProduct(@PathVariable UUID storeId, @RequestBody ProductRequest request) {
+        return ResponseEntity.ok(storeService.createProduct(storeId, request));
     }
 
 }

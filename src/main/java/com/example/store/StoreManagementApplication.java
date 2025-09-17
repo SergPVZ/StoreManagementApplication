@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 												обозначает главный класс*/
 @EnableJpaAuditing
 public class StoreManagementApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(StoreManagementApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(StoreManagementApplication.class, args);
+    }
 
 }

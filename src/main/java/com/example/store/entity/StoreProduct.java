@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -33,4 +34,28 @@ public class StoreProduct {
     @Column
     private UUID productId;
 
+    @Data
+    @Entity(name = "products")
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @EqualsAndHashCode
+    @EnableJpaAuditing
+    @EntityListeners(AuditingEntityListener.class)
+
+    public static class Product {
+
+        @Id
+        @Column
+        private UUID id;
+
+        @Column
+        private String name;
+
+        @Column
+        private BigDecimal price;
+
+        @Column
+        private String category;
+
+    }
 }

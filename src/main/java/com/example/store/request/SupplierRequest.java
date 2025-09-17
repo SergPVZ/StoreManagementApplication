@@ -16,22 +16,22 @@ import org.hibernate.validator.constraints.URL;
 
 public class SupplierRequest {
 
-    @Schema(description ="название поставщика")
+    @Schema(description = "название поставщика")
     @NotBlank
     private String name;
 
-    @Schema(description ="email поставщика")
+    @Schema(description = "email поставщика")
     @NotBlank
     @Email
     private String email;
 
-    @Schema(description ="телефон поставщика")
+    @Schema(description = "телефон поставщика")
     private String phone;
 
-    @Schema(description ="адрес поставщика")
+    @Schema(description = "адрес поставщика")
     private String address;
 
-    @Schema(description ="сайт")
+    @Schema(description = "сайт")
     @URL
     private String website;
 

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.UUID;
 
 @Schema(description = "DTO с основной информацией о поставщике")
@@ -18,16 +19,16 @@ public class SupplierResponseDto {
     @Schema(description = "Имя поставщика")
     private String name;
 
-    @Schema(description ="Электронная почта поставщика")
+    @Schema(description = "Электронная почта поставщика")
     private String email;
 
-    @Schema(description ="Номер телефона")
+    @Schema(description = "Номер телефона")
     private String phone;
 
-    @Schema(description ="Адрес поставщика")
+    @Schema(description = "Адрес поставщика")
     private String address;
 
-    @Schema(description ="Веб-сайт")
+    @Schema(description = "Веб-сайт")
     private String website;
 
 }

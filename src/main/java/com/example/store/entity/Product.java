@@ -1,4 +1,4 @@
-package com.example.store.request;
+package com.example.store.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-
 @Data
 @Entity(name = "products")
 @AllArgsConstructor
@@ -22,7 +21,6 @@ import java.util.UUID;
 @EqualsAndHashCode
 @EnableJpaAuditing
 @EntityListeners(AuditingEntityListener.class)
-
 public class Product {
 
     @Id

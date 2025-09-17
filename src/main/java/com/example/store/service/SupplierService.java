@@ -4,6 +4,7 @@ import com.example.store.dto.SupplierResponseDto;
 import com.example.store.entity.Supplier;
 import com.example.store.mapper.SupplierMapper;
 import com.example.store.repository.SupplierRepository;
+import com.example.store.request.SupplierContactRequest;
 import com.example.store.request.SupplierRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class SupplierService {
 
     @Autowired
     private SupplierMapper mapper;
+
+    @Autowired
+    private SupplierMapper supplierMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public SupplierResponseDto createSupplier(@Valid SupplierRequest request) {
@@ -49,7 +53,6 @@ public class SupplierService {
         return mapper.mapToSupplierResponseDto(supplier);
 
     }
-
 
     @Transactional(rollbackFor = Exception.class)
     public SupplierResponseDto updateById(UUID id, @Valid SupplierRequest request) {
@@ -78,4 +81,22 @@ public class SupplierService {
         return list;
 
     }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public SupplierResponseDto updateContactById(UUID supplierId, SupplierContactRequest request) {
+
+        Supplier supplier = supplierRepository.findById(supplierId)
+                .orElseThrow();
+
+        supplier.setPhone(request.getPhone());
+        supplier.setEmail(request.getEmail());
+        supplier.setWebsite(request.getWebsite());
+
+        supplierRepository.saveAndFlush(supplier);
+
+        return supplierMapper.mapToSupplierResponseDto(supplier);
+
+    }
+
 }
