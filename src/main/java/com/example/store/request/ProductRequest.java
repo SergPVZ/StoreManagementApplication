@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class ProductRequest {
+public class ProductRequest{
 
     @Schema(description = "Название продукта")       // описание данных поля
     @JsonProperty("name")                            // задаёт альтернативное имя для поля JSON

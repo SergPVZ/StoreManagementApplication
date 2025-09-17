@@ -22,8 +22,8 @@ public class StoreResponseDto extends AllStoresResponseDto {         /* испо
 
     @Schema(description = "Местоположение магазина")
     private String location;
-    //
-    @Schema(description = "Электронная почта магазина")
+
+     @Schema(description = "Электронная почта магазина")
     private String email;
 
 }

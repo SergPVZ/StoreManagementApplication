@@ -166,7 +166,6 @@ public class StoreService {                      /* основная логик�
     public List<ProductResponseDto> findUniqueProducts() {
 
         List<Product> allProducts = productRepository.findAll();
-
         List<ProductResponseDto> result = new ArrayList<>();
 
         for (Product product : allProducts) {
