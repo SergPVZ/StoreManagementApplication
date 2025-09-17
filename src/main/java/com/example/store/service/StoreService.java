@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service                                         /* обозначает класс Сервис, который вызывает методы класса Контроллера
                                                     для выполнения бизнес-логики */
-//@Transactional(rollbackOn = Exception.class)     // в случае поломки проводит откат предыдущих изменений
+//@Transactional(rollbackOn = Exception.class)     // в случае поломки производит откат предыдущих изменений
 @Transactional(readOnly = true)                    // весь класс - только для чтения
 @Validated
 public class StoreService {                      /* основная логика работы с данными
